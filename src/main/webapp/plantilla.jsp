@@ -2,7 +2,6 @@
 <%@page import="java.util.List"%>
 <%@include file="lib/header.jsp" %>
 
-
 <div class="container p-4">
     <div class="card card-body">
         <h1 class="text-center mb-4">Mundial de Futbol</h1> <!-- Titulo  -->
@@ -10,7 +9,7 @@
             <!-- Columna izquierda -->
             <div class="col-md-4">
                 <div class="card card-body">
-                    <h5 class="text-center mb-3">Agregar Equipo</h5> 
+                    <h5 class="text-center mb-3">Agregar Jugador</h5> 
                     <form action="sv_AgregarEquipo" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="id">Id:</label>  
@@ -74,76 +73,14 @@
         </div>
     </div>
 </div>
-  
-<% if (listaEquipos != null && !listaEquipos.isEmpty()) {
-    for (Equipo e : listaEquipos) {
-        String traerImagen = e.getImagenBandera(); 
-%>
-    <!-- Modal Ver Equipo -->
-    <div class="modal fade" id="verModal<%= e.getIdEquipo() %>" tabindex="-1" aria-labelledby="verModalLabel<%= e.getIdEquipo() %>" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="verModalLabel<%= e.getIdEquipo() %>">Información del Equipo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>ID: <%= e.getIdEquipo() %></p>
-                    <p>Pais: <%= e.getPais() %></p>
-                    <p>Director: <%= e.getDirector() %></p>
-                    <% if (traerImagen != null && !traerImagen.isEmpty()) {%>
-                        <p><img src="<%= request.getContextPath() + "/" + e.getImagenBandera()%>" alt="Imagen de la Bandera" class="img-fluid"></p>
-                    <% } else { %>
-                        <p>No hay imagen disponible</p>
-                    <% }%>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal Editar Equipo -->
-    <div class="modal fade" id="verModal2<%= e.getIdEquipo()%>" tabindex="-1" aria-labelledby="verModal2Label<%= e.getIdEquipo()%>" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="verModal2Label<%= e.getIdEquipo()%>">Editar Equipo con ID: <%= e.getIdEquipo()%></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="sv_EditarEquipo" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="<%= e.getIdEquipo() %>">
-                        <div class="mb-3">
-                            <label for="placa" class="form-label">Placa:</label>
-                            <input type="text" name="pais" value="<%= e.getPais() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="marca" class="form-label">Marca:</label>
-                            <input type="text" name="director" value="<%= e.getDirector() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="bandera" class="form-label">Imagen Bandera:</label>
-                            <input type="file" name="bandera" id="imagen" class="form-control" accept="image/*">
-                        </div>
-                        <div class="mb-2">
-                        <a href="plantilla.jsp" class="btn btn-success btn-block">Modificar Plantilla</a>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
-                            <button type="button" class="btn btn-danger btn-block" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<%-- Mensaje de Hola Mundo --%>
+<div class="container mt-4">
+    <div class="alert alert-success" role="alert">
+        ¡Hola Mundo!
     </div>
-<% 
-    }
-}
-%>
-                                    
+</div>
+
 <% 
 String mensaje = (String) request.getSession().getAttribute("mensaje");
 if (mensaje != null && !mensaje.isEmpty()) { %>
@@ -160,10 +97,12 @@ if (mensaje != null && !mensaje.isEmpty()) { %>
     session.removeAttribute("mensaje");
 }
 %>                        
+
 <script>
     setTimeout(function() {
         var autoToast = new bootstrap.Toast(document.getElementById('autoToast'));
         autoToast.show();
     }, 0); 
-</script>                                    
+</script>
+
 <%@include file="lib/footer.jsp" %>
