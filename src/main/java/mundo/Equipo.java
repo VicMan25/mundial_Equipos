@@ -1,12 +1,14 @@
 package mundo;
 
+import java.util.List;
+
 public class Equipo {
    
     private int idEquipo;
     private String pais;
     private String director;
     private String imagenBandera;
-    
+
     public Equipo() {
     }
 
@@ -48,4 +50,5 @@ public class Equipo {
     public void setImagenBandera(String imagenBandera) {
         this.imagenBandera = imagenBandera;
     }
+   
 }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.servlet.annotation.MultipartConfig;
-import mundo.Equipo;
+import mundo.Jugador;
 
 @WebServlet(name = "sv_AgregarJugador", urlPatterns = {"/sv_AgregarJugador"})
 @MultipartConfig
@@ -38,26 +38,30 @@ public class sv_AgregarJugador extends HttpServlet {
             throws ServletException, IOException {
         try {
             int idJugador = Integer.parseInt(request.getParameter("idJugador"));
-            String pais = request.getParameter("pais");
-            String director = request.getParameter("director");
+            String nombre = request.getParameter("nombre");
+            int edad = Integer.parseInt(request.getParameter("edad"));
+            double altura = Double.parseDouble(request.getParameter("altura"));
+            double peso = Double.parseDouble(request.getParameter("peso"));
+            double salario = Double.parseDouble(request.getParameter("salario"));
+            String posicion = request.getParameter("posicion");
 
             // Verificar si el ID ya existe en la lista
-            List<Equipo> listaEquipos = (List<Equipo>) request.getSession().getAttribute("listaEquipos");
-            if (listaEquipos != null) {
-                for (Equipo e : listaEquipos) {
-                    if (e.getIdEquipo() == idJugador) {
+            List<Jugador> listaJugadores = (List<Jugador>) request.getSession().getAttribute("listaJugadores");
+            if (listaJugadores != null) {
+                for (Jugador j : listaJugadores) {
+                    if (j.getIdJugador() == idJugador) {
                         // El ID ya existe, mostrar un mensaje de error y redireccionar
-                        request.getSession().setAttribute("mensaje", "El ID del equipo ya está en uso.");
-                        response.sendRedirect("index.jsp");
+                        request.getSession().setAttribute("mensaje", "El ID del jugador ya está en uso.");
+                        response.sendRedirect("plantilla.jsp");
                         return; // Salir del método doPost
                     }
                 }
             }
 
             // Si el ID no está duplicado, proceder a agregar el equipo
-            Part imagenPart = request.getPart("bandera");
+            Part imagenPart = request.getPart("foto");
             if (imagenPart == null || imagenPart.getSize() == 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No se ha enviado la imagen");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No se ha enviado la foto");
                 return;
             }
 
@@ -73,16 +77,16 @@ public class sv_AgregarJugador extends HttpServlet {
                 Files.copy(input, Paths.get(imagenPath), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            Equipo nuevoEquipo = new Equipo(idJugador, pais, director, "images/" + imagenFileName);
+            Jugador nuevoJugador = new Jugador(idJugador, nombre, edad, altura, peso, salario, posicion,  "images/" + imagenFileName);
 
-            if (listaEquipos == null) {
-                listaEquipos = new ArrayList<>();
+            if (listaJugadores == null) {
+                listaJugadores = new ArrayList<>();
             }
-            listaEquipos.add(nuevoEquipo);
-            request.getSession().setAttribute("listaEquipos", listaEquipos);
+            listaJugadores.add(nuevoJugador);
+            request.getSession().setAttribute("listaJugadores", listaJugadores);
 
-            request.getSession().setAttribute("mensaje", "Equipo agregado correctamente.");
-            response.sendRedirect("index.jsp");
+            request.getSession().setAttribute("mensaje", "Jugador agregado correctamente.");
+            response.sendRedirect("plantilla.jsp");
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID no es válido");
         } catch (IOException | ServletException e) {

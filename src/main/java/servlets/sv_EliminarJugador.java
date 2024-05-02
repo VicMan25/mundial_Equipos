@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.MultipartConfig;
-import mundo.Equipo;
+import mundo.Jugador;
 
-@WebServlet(name = "sv_EliminarEquipo", urlPatterns = {"/sv_EliminarEquipo"})
+@WebServlet(name = "sv_EliminarJugador", urlPatterns = {"/sv_EliminarJugador"})
 @MultipartConfig
-public class sv_EliminarEquipo extends HttpServlet {
+public class sv_EliminarJugador extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,31 +25,31 @@ public class sv_EliminarEquipo extends HttpServlet {
             throws ServletException, IOException {
         int idEliminar = Integer.parseInt(request.getParameter("id"));
         HttpSession session = request.getSession(true);
-        List<Equipo> listaEquipos = (List<Equipo>) session.getAttribute("listaEquipos");
+        List<Jugador> listaJugadores = (List<Jugador>) session.getAttribute("listaJugadores");
         
-        if (listaEquipos == null) {
-                session.setAttribute("mensaje", "No hay equipos para eliminar");
-                response.sendRedirect("index.jsp");
+        if (listaJugadores == null) {
+                session.setAttribute("mensaje", "No hay jugador para eliminar");
+                response.sendRedirect("plantilla.jsp");
                 return;
             }
         
-        boolean equipoEliminado = false;
-            for (Equipo e : listaEquipos) {
-                if (e.getIdEquipo() == idEliminar) {
-                    listaEquipos.remove(e);
-                    equipoEliminado = true;
+        boolean jugadorEliminado = false;
+            for (Jugador j : listaJugadores) {
+                if (j.getIdJugador() == idEliminar) {
+                    listaJugadores.remove(j);
+                    jugadorEliminado = true;
                     break;
                 }
             }
          
         
-        if (equipoEliminado) {
-            session.setAttribute("mensaje", "El equipo de ID: " +idEliminar+" se ha eliminado correctamente.");
+        if (jugadorEliminado) {
+            session.setAttribute("mensaje", "El jugador de ID: " +idEliminar+" se ha eliminado correctamente.");
         } else {
-            session.setAttribute("mensaje", "No se encontró el equipo con ID: " + idEliminar);
+            session.setAttribute("mensaje", "No se encontró el jugador con ID: " + idEliminar);
         }
         
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("plantilla.jsp");
     }
 
     @Override
