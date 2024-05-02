@@ -13,7 +13,7 @@
                     <h5 class="text-center mb-3">Agregar Equipo</h5> 
                     <form action="sv_AgregarEquipo" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label for="id">Id:</label>  
+                            <label for="idEquipo">Id:</label>  
                             <input type="text" name="idEquipo" class="form-control" required>
                         </div>
                         <div class="mb-3">
@@ -114,13 +114,13 @@
                 </div>
                 <div class="modal-body">
                     <form action="sv_EditarEquipo" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="<%= e.getIdEquipo() %>">
+                        <input type="hidden" name="idEquipo" value="<%= e.getIdEquipo() %>">
                         <div class="mb-3">
-                            <label for="placa" class="form-label">Placa:</label>
+                            <label for="pais" class="form-label">Pais:</label>
                             <input type="text" name="pais" value="<%= e.getPais() %>" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label for="marca" class="form-label">Marca:</label>
+                            <label for="director" class="form-label">Director:</label>
                             <input type="text" name="director" value="<%= e.getDirector() %>" class="form-control">
                         </div>
                         <div class="mb-3">

@@ -16,10 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.servlet.annotation.MultipartConfig;
 import mundo.Equipo;
+import mundo.GestionarEquipos;
 
 @WebServlet(name = "sv_AgregarEquipo", urlPatterns = {"/sv_AgregarEquipo"})
 @MultipartConfig
 public class sv_AgregarEquipo extends HttpServlet {
+    
+    GestionarEquipos gesEquipo = new GestionarEquipos();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
