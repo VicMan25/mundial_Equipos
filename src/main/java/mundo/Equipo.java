@@ -1,7 +1,5 @@
 package mundo;
 
-import java.util.List;
-
 public class Equipo {
    
     private int idEquipo;

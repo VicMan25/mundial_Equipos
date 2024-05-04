@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,17 +21,7 @@ import mundo.GestionarEquipos;
 @MultipartConfig
 public class sv_AgregarEquipo extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    private GestionarEquipos gesEquipos = new GestionarEquipos();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,8 +32,8 @@ public class sv_AgregarEquipo extends HttpServlet {
             String director = request.getParameter("director");
 
             // Verificar si el ID ya existe en la lista
-            List<Equipo> listaEquipos = (List<Equipo>) request.getSession().getAttribute("listaEquipos");
-            if (listaEquipos != null) {
+            List<Equipo> listaEquipos = gesEquipos.getMisEquipos();
+            if (listaEquipos!= null) {
                 for (Equipo e : listaEquipos) {
                     if (e.getIdEquipo() == idEquipo) {
                         // El ID ya existe, mostrar un mensaje de error y redireccionar
@@ -76,11 +65,9 @@ public class sv_AgregarEquipo extends HttpServlet {
 
             Equipo nuevoEquipo = new Equipo(idEquipo, pais, director, "images/" + imagenFileName);
 
-            if (listaEquipos == null) {
-                listaEquipos = new ArrayList<>();
-            }
-            listaEquipos.add(nuevoEquipo);
-            request.getSession().setAttribute("listaEquipos", listaEquipos);
+            gesEquipos.agregarEquipo(nuevoEquipo);
+            gesEquipos.guardarEquiposEnArchivo();
+
 
             request.getSession().setAttribute("mensaje", "Equipo agregado correctamente.");
             response.sendRedirect("index.jsp");
@@ -89,7 +76,6 @@ public class sv_AgregarEquipo extends HttpServlet {
         } catch (IOException | ServletException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar la solicitud");
         }
-
     }
 
     @Override
