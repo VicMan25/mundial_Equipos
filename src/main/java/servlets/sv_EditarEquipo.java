@@ -37,7 +37,7 @@ public class sv_EditarEquipo extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try{
+        try {
             int nuevoId = Integer.parseInt(request.getParameter("id"));
             String nuevoPais = request.getParameter("pais");
             String nuevoDirector = request.getParameter("director");
@@ -51,7 +51,7 @@ public class sv_EditarEquipo extends HttpServlet {
                 return;
             }
             
-            for(Equipo e: listaEquipos){
+            for (Equipo e : listaEquipos) {
                 if (e.getIdEquipo() == nuevoId) {
                     e.setPais(nuevoPais);
                     e.setDirector(nuevoDirector);
@@ -73,7 +73,7 @@ public class sv_EditarEquipo extends HttpServlet {
                     break; 
                 }
             }
-            session.setAttribute("mensaje", "El equipo se edito correctamente");
+            session.setAttribute("mensaje", "El equipo se editó correctamente");
             response.sendRedirect("index.jsp");
         } catch (NumberFormatException e) {
             request.getSession().setAttribute("mensaje", "ID del equipo es inválido");

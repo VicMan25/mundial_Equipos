@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.MultipartConfig;
 import mundo.Equipo;
+import mundo.GestionarEquipos;
 
 @WebServlet(name = "sv_EliminarEquipo", urlPatterns = {"/sv_EliminarEquipo"})
 @MultipartConfig
@@ -25,26 +26,33 @@ public class sv_EliminarEquipo extends HttpServlet {
             throws ServletException, IOException {
         int idEliminar = Integer.parseInt(request.getParameter("id"));
         HttpSession session = request.getSession(true);
-        List<Equipo> listaEquipos = (List<Equipo>) session.getAttribute("listaEquipos");
+        
+        // Obtener la lista de equipos del contexto de aplicación
+        GestionarEquipos gesEquipos = new GestionarEquipos();
+        List<Equipo> listaEquipos = gesEquipos.getMisEquipos(request.getServletContext());
         
         if (listaEquipos == null) {
-                session.setAttribute("mensaje", "No hay equipos para eliminar");
-                response.sendRedirect("index.jsp");
-                return;
-            }
+            session.setAttribute("mensaje", "No hay equipos para eliminar");
+            response.sendRedirect("index.jsp");
+            return;
+        }
         
         boolean equipoEliminado = false;
-            for (Equipo e : listaEquipos) {
-                if (e.getIdEquipo() == idEliminar) {
-                    listaEquipos.remove(e);
+        for (Equipo e : listaEquipos) {
+            if (e.getIdEquipo() == idEliminar) {
+                // Eliminar el equipo de la lista
+                try {
+                    gesEquipos.eliminarEquipo(idEliminar, request.getServletContext());
                     equipoEliminado = true;
-                    break;
+                } catch (IOException ex) {
+                    session.setAttribute("mensaje", "Error al eliminar el equipo: " + ex.getMessage());
                 }
+                break;
             }
-         
+        }
         
         if (equipoEliminado) {
-            session.setAttribute("mensaje", "El equipo de ID: " +idEliminar+" se ha eliminado correctamente.");
+            session.setAttribute("mensaje", "El equipo de ID: " + idEliminar + " se ha eliminado correctamente.");
         } else {
             session.setAttribute("mensaje", "No se encontró el equipo con ID: " + idEliminar);
         }

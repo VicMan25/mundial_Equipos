@@ -8,52 +8,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import mundo.Equipo;
+import javax.servlet.ServletContext;
 
 public class GestionarEquipos {
 
     private List<Equipo> misEquipos;
-    private static final String ARCHIVO_EQUIPOS = "data/equipos.txt";
 
-    public GestionarEquipos() {
-        misEquipos = new ArrayList<>();
-        cargarEquiposDesdeArchivo();
-    }
+    public void cargarEquiposDesdeArchivo(ServletContext context) {
+        // Reutilizamos la ruta relativa del archivo
+        String relativePath = "/data/equipos.txt";
+        String absPath = context.getRealPath(relativePath);
 
-    public void agregarEquipo(Equipo equipo) throws IOException {
-        misEquipos.add(equipo);
-        guardarEquiposEnArchivo();
-    }
+        File archivo = new File(absPath);
+        misEquipos = new ArrayList<>(); // Inicializamos la lista aquí
 
-    public void eliminarEquipo(int idEquipo) throws IOException {
-        Equipo equipoAEliminar = null;
-        for (Equipo equipo : misEquipos) {
-            if (equipo.getIdEquipo() == idEquipo) {
-                equipoAEliminar = equipo;
-                break;
-            }
-        }
-        if (equipoAEliminar!= null) {
-            misEquipos.remove(equipoAEliminar);
-            guardarEquiposEnArchivo();
-        }
-    }
-
-    public Equipo buscarEquipo(int idEquipo) {
-        for (Equipo equipo : misEquipos) {
-            if (equipo.getIdEquipo() == idEquipo) {
-                return equipo;
-           }
-        }
-        return null;
-    }
-
-    public List<Equipo> getMisEquipos() {
-        return misEquipos;
-    }
-
-    private void cargarEquiposDesdeArchivo() {
-        File archivo = new File(ARCHIVO_EQUIPOS);
         if (archivo.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
                 String linea;
@@ -72,10 +40,18 @@ public class GestionarEquipos {
         }
     }
 
-    public void guardarEquiposEnArchivo() throws IOException {
-        File archivo = new File(ARCHIVO_EQUIPOS);
+    public void guardarEquiposEnArchivo(ServletContext context) {
+        // Reutilizamos la ruta relativa del archivo
+        String relativePath = "/data/equipos.txt";
+        String absPath = context.getRealPath(relativePath);
+
+        File archivo = new File(absPath);
         if (!archivo.exists()) {
-            archivo.createNewFile();
+            try {
+                archivo.createNewFile();
+            } catch (IOException e) {
+                System.err.println("Error al crear el archivo: " + e.getMessage());
+            }
         }
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Equipo e : misEquipos) {
@@ -86,4 +62,43 @@ public class GestionarEquipos {
             System.err.println("Error al guardar los equipos en el archivo: " + e.getMessage());
         }
     }
+
+    public void agregarEquipo(Equipo equipo, ServletContext context) throws IOException {
+        cargarEquiposDesdeArchivo(context); // Cargar equipos antes de agregar uno nuevo
+        misEquipos.add(equipo);
+        guardarEquiposEnArchivo(context);
+    }
+
+    public void eliminarEquipo(int idEquipo, ServletContext context) throws IOException {
+        cargarEquiposDesdeArchivo(context);
+        if (misEquipos != null) {
+            Equipo equipoAEliminar = null;
+            for (Equipo e : misEquipos) {
+                if (e.getIdEquipo() == idEquipo) {
+                    equipoAEliminar = e;
+                    break;
+                }
+            }
+            if (equipoAEliminar != null) {
+                misEquipos.remove(equipoAEliminar);
+                guardarEquiposEnArchivo(context);
+            }
+        }
+    }
+
+    public Equipo buscarEquipo(int idEquipo, ServletContext context) {
+        cargarEquiposDesdeArchivo(context);
+        for (Equipo e : misEquipos) {
+            if (e.getIdEquipo() == idEquipo) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public List<Equipo> getMisEquipos(ServletContext context) {
+        cargarEquiposDesdeArchivo(context);
+        return misEquipos;
+    }
+
 }

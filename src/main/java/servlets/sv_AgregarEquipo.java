@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.ServletContext;
 import mundo.Equipo;
 import mundo.GestionarEquipos;
 
@@ -21,7 +22,7 @@ import mundo.GestionarEquipos;
 @MultipartConfig
 public class sv_AgregarEquipo extends HttpServlet {
 
-    private GestionarEquipos gesEquipos = new GestionarEquipos();
+    public static GestionarEquipos gesEquipos = new GestionarEquipos();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,7 +33,7 @@ public class sv_AgregarEquipo extends HttpServlet {
             String director = request.getParameter("director");
 
             // Verificar si el ID ya existe en la lista
-            List<Equipo> listaEquipos = gesEquipos.getMisEquipos();
+            List<Equipo> listaEquipos = gesEquipos.getMisEquipos(getServletContext());
             if (listaEquipos!= null) {
                 for (Equipo e : listaEquipos) {
                     if (e.getIdEquipo() == idEquipo) {
@@ -65,8 +66,7 @@ public class sv_AgregarEquipo extends HttpServlet {
 
             Equipo nuevoEquipo = new Equipo(idEquipo, pais, director, "images/" + imagenFileName);
 
-            gesEquipos.agregarEquipo(nuevoEquipo);
-            gesEquipos.guardarEquiposEnArchivo();
+            gesEquipos.agregarEquipo(nuevoEquipo, getServletContext());
 
 
             request.getSession().setAttribute("mensaje", "Equipo agregado correctamente.");
