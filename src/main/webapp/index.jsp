@@ -114,7 +114,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="verModal2Label<%= e.getIdEquipo()%>">Editar Equipo con ID: <%= e.getIdEquipo()%></h5>
+                <h5 class="modal-title" id="verModal2Label<%= e.getIdEquipo()%>">Editar Equipo: <%= e.getPais()%></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -143,5 +143,28 @@
 </div>
 
 <% } } %>
+
+<%
+    String mensaje = (String) request.getSession().getAttribute("mensaje");
+    if (mensaje != null && !mensaje.isEmpty()) {%>
+<div id="autoToast" class="toast position-fixed bottom-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-warning text-dark">
+        <strong class="me-auto">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-secondary text-light">
+        <%= mensaje%>
+    </div>
+</div>
+<%
+        session.removeAttribute("mensaje");
+    }
+%>                        
+<script>
+    setTimeout(function () {
+        var autoToast = new bootstrap.Toast(document.getElementById('autoToast'));
+        autoToast.show();
+    }, 0);
+</script> 
 
 <%@include file="lib/footer.jsp" %>

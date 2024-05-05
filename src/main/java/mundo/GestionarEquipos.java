@@ -1,5 +1,5 @@
 package mundo;
-
+//Vm
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +13,44 @@ import javax.servlet.ServletContext;
 public class GestionarEquipos {
 
     private List<Equipo> misEquipos;
+
+    public void agregarEquipo(Equipo equipo, ServletContext context) throws IOException {
+        cargarEquiposDesdeArchivo(context); // Cargar equipos antes de agregar uno nuevo
+        misEquipos.add(equipo);
+        guardarEquiposEnArchivo(context);
+    }
+
+    public void eliminarEquipo(int idEquipo, ServletContext context) throws IOException {
+        cargarEquiposDesdeArchivo(context);
+        if (misEquipos != null) {
+            Equipo equipoAEliminar = null;
+            for (Equipo e : misEquipos) {
+                if (e.getIdEquipo() == idEquipo) {
+                    equipoAEliminar = e;
+                    break;
+                }
+            }
+            if (equipoAEliminar != null) {
+                misEquipos.remove(equipoAEliminar);
+                guardarEquiposEnArchivo(context);
+            }
+        }
+    }
+
+    public Equipo buscarEquipo(int idEquipo, ServletContext context) {
+        cargarEquiposDesdeArchivo(context);
+        for (Equipo e : misEquipos) {
+            if (e.getIdEquipo() == idEquipo) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public List<Equipo> getMisEquipos(ServletContext context) {
+        cargarEquiposDesdeArchivo(context);
+        return misEquipos;
+    }
 
     public void cargarEquiposDesdeArchivo(ServletContext context) {
         // Reutilizamos la ruta relativa del archivo
@@ -63,42 +101,22 @@ public class GestionarEquipos {
         }
     }
 
-    public void agregarEquipo(Equipo equipo, ServletContext context) throws IOException {
-        cargarEquiposDesdeArchivo(context); // Cargar equipos antes de agregar uno nuevo
-        misEquipos.add(equipo);
-        guardarEquiposEnArchivo(context);
-    }
+    public void editarEquipo(int idEquipo, String nuevoPais, String nuevoDirector, String nuevaImagenBandera, ServletContext context) throws IOException {
+        cargarEquiposDesdeArchivo(context); // Cargar equipos antes de editar uno existente
 
-    public void eliminarEquipo(int idEquipo, ServletContext context) throws IOException {
-        cargarEquiposDesdeArchivo(context);
-        if (misEquipos != null) {
-            Equipo equipoAEliminar = null;
-            for (Equipo e : misEquipos) {
-                if (e.getIdEquipo() == idEquipo) {
-                    equipoAEliminar = e;
-                    break;
-                }
-            }
-            if (equipoAEliminar != null) {
-                misEquipos.remove(equipoAEliminar);
-                guardarEquiposEnArchivo(context);
-            }
-        }
-    }
-
-    public Equipo buscarEquipo(int idEquipo, ServletContext context) {
-        cargarEquiposDesdeArchivo(context);
         for (Equipo e : misEquipos) {
             if (e.getIdEquipo() == idEquipo) {
-                return e;
+                // Se encontró el equipo, ahora se actualizan sus datos
+                e.setPais(nuevoPais);
+                e.setDirector(nuevoDirector);
+                e.setImagenBandera(nuevaImagenBandera);
+                // Guardar los cambios en el archivo
+                guardarEquiposEnArchivo(context);
+                return; // Salir del método después de editar el equipo
             }
         }
-        return null;
-    }
-
-    public List<Equipo> getMisEquipos(ServletContext context) {
-        cargarEquiposDesdeArchivo(context);
-        return misEquipos;
+        // Si llega aquí, significa que no se encontró el equipo con el ID especificado
+        System.err.println("No se encontró el equipo con ID: " + idEquipo);
     }
 
 }
