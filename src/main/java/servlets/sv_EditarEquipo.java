@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +37,7 @@ public class sv_EditarEquipo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int idEquipo = Integer.parseInt(request.getParameter("id"));
+            int idEquipo = Integer.parseInt(request.getParameter("idEquipo"));
             String nuevoPais = request.getParameter("pais");
             String nuevoDirector = request.getParameter("director");
 

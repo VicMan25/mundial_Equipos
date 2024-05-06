@@ -1,3 +1,4 @@
+<%@page import="mundo.GestionarJugadores"%>
 <%@page import="mundo.Equipo"%>
 <%@page import="mundo.Jugador"%>
 <%@page import="java.util.List"%>
@@ -76,11 +77,17 @@
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
+                        <%
+                        GestionarJugadores gesJugadores = new GestionarJugadores();
+                        ServletContext context = request.getServletContext();
+                        gesJugadores.cargarJugadoresDesdeArchivo(context);
+                        List<Jugador> misJugadores = gesJugadores.getMisJugadores(context);
+
+                        if (misJugadores != null) {
+                            for (Jugador j : misJugadores) {
+                        %>
                         <tbody>
-                            <%
-                                List<Jugador> listaJugadores = (List<Jugador>) request.getSession().getAttribute("listaJugadores");
-                                if (listaJugadores != null && !listaJugadores.isEmpty()) {
-                                    for (Jugador j : listaJugadores) {%>
+                            
                             <tr>
                                 <td><%= j.getIdJugador()%></td>
                                 <td><%= j.getNombre()%></td>
@@ -107,8 +114,8 @@
 
 </div>
 
-<% if (listaJugadores != null && !listaJugadores.isEmpty()) {
-        for (Jugador j : listaJugadores) {
+<% if (misJugadores != null && !misJugadores.isEmpty()) {
+        for (Jugador j : misJugadores) {
             String traerImagen = j.getFoto();
 %>                      
 <div class="modal fade" id="verModa3<%= j.getIdJugador()%>" tabindex="-1" aria-labelledby="verModalLabel<%= j.getIdJugador()%>" aria-hidden="true">

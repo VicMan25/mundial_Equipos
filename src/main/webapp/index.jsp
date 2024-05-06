@@ -135,6 +135,9 @@
                         <label for="bandera">Imagen de Bandera:</label>
                         <input type="file" class="form-control" id="bandera" name="bandera">
                     </div>
+                    <div class="mb-2">
+                        <a href="plantilla.jsp" class="btn btn-success btn-block">Modificar Plantilla Del Equipo</a>
+                    </div>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </form>
             </div>
