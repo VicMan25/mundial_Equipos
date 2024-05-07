@@ -121,7 +121,7 @@
                 <form action="sv_EditarEquipo" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="idEquipo">ID:</label>
-                        <input type="text" class="form-control" id="idEquipo" name="id" value="<%= e.getIdEquipo()%>" readonly>
+                        <input type="text" class="form-control" id="id" name="id" value="<%= e.getIdEquipo()%>" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="pais">Pais:</label>

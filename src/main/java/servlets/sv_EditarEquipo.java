@@ -37,7 +37,7 @@ public class sv_EditarEquipo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int idEquipo = Integer.parseInt(request.getParameter("idEquipo"));
+            int idEquipo = Integer.parseInt(request.getParameter("id"));
             String nuevoPais = request.getParameter("pais");
             String nuevoDirector = request.getParameter("director");
 
