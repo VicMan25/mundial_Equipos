@@ -75,13 +75,13 @@ public class sv_EditarJugador extends HttpServlet {
             } else {
                 session.setAttribute("mensaje", "No se encontró el jugador con ID: " + idJugador);
             }
-            response.sendRedirect("plantilla.jsp");
+            response.sendRedirect("secondary.jsp");
         } catch (NumberFormatException e) {
             request.getSession().setAttribute("mensaje", "ID del jugador es inválido");
-            response.sendRedirect("plantilla.jsp");
+            response.sendRedirect("secondary.jsp");
         } catch (IOException | ServletException e) {
             request.getSession().setAttribute("mensaje", "Error al modificar el jugador: " + e.getMessage());
-            response.sendRedirect("plantilla.jsp");
+            response.sendRedirect("secondary.jsp");
         }
     }
 

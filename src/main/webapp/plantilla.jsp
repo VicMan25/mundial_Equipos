@@ -52,7 +52,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="marca">Posición:</label>  
-                            <input type="text" name="posicion" class="form-control" required>
+                            <select name="posicion" class="form-control" required>
+                                <option value="" selected disabled>Seleccione una posición</option>
+                                <option value="ARQ">ARQUERO</option>
+                                <option value="DEF">DEFENSA</option>
+                                <option value="CEN">CENTROCAMPISTA</option>
+                                <option value="DEL">DELANTERO</option>
+                            </select>
+
                         </div>
                         <div class="mb-3">
                             <input type="file" name="foto" id="imagen" class="form-control" accept="image/*" required>
@@ -78,16 +85,16 @@
                             </tr>
                         </thead>
                         <%
-                        GestionarJugadores gesJugadores = new GestionarJugadores();
-                        ServletContext context = request.getServletContext();
-                        gesJugadores.cargarJugadoresDesdeArchivo(context);
-                        List<Jugador> misJugadores = gesJugadores.getMisJugadores(context);
+                            GestionarJugadores gesJugadores = new GestionarJugadores();
+                            ServletContext context = request.getServletContext();
+                            gesJugadores.cargarJugadoresDesdeArchivo(context);
+                            List<Jugador> misJugadores = gesJugadores.getMisJugadores(context);
 
-                        if (misJugadores != null) {
-                            for (Jugador j : misJugadores) {
+                            if (misJugadores != null) {
+                                for (Jugador j : misJugadores) {
                         %>
                         <tbody>
-                            
+
                             <tr>
                                 <td><%= j.getIdJugador()%></td>
                                 <td><%= j.getNombre()%></td>
@@ -147,56 +154,56 @@
 </div>
 
 <!-- Modal Editar Jugador -->
-    <div class="modal fade" id="verModal2<%= j.getIdJugador()%>" tabindex="-1" aria-labelledby="verModal2Label<%= j.getIdJugador()%>" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="verModal2Label<%= j.getIdJugador()%>">Editar Jugador con ID: <%= j.getIdJugador()%></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="sv_EditarJugador" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="idJugador" value="<%= j.getIdJugador() %>">
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre:</label>
-                            <input type="text" name="nombre" value="<%= j.getNombre() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="edad" class="form-label">Edad:</label>
-                            <input type="text" name="edad" value="<%= j.getEdad() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="altura" class="form-label">Altura:</label>
-                            <input type="text" name="altura" value="<%= j.getAltura() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="peso" class="form-label">Peso:</label>
-                            <input type="text" name="peso" value="<%= j.getPeso() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="salario" class="form-label">Salario:</label>
-                            <input type="text" name="salario" value="<%= j.getSalario() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="posicion" class="form-label">Posición:</label>
-                            <input type="text" name="posicion" value="<%= j.getPosicion() %>" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="foto" class="form-label">Foto del jugador:</label>
-                            <input type="file" name="foto" id="imagen" class="form-control" accept="image/*">
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
-                            <button type="button" class="btn btn-danger btn-block" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="verModal2<%= j.getIdJugador()%>" tabindex="-1" aria-labelledby="verModal2Label<%= j.getIdJugador()%>" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verModal2Label<%= j.getIdJugador()%>">Editar Jugador con ID: <%= j.getIdJugador()%></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="sv_EditarJugador" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="idJugador" value="<%= j.getIdJugador()%>">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" name="nombre" value="<%= j.getNombre()%>" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edad" class="form-label">Edad:</label>
+                        <input type="text" name="edad" value="<%= j.getEdad()%>" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="altura" class="form-label">Altura:</label>
+                        <input type="text" name="altura" value="<%= j.getAltura()%>" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="peso" class="form-label">Peso:</label>
+                        <input type="text" name="peso" value="<%= j.getPeso()%>" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="salario" class="form-label">Salario:</label>
+                        <input type="text" name="salario" value="<%= j.getSalario()%>" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="posicion" class="form-label">Posición:</label>
+                        <input type="text" name="posicion" value="<%= j.getPosicion()%>" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Foto del jugador:</label>
+                        <input type="file" name="foto" id="imagen" class="form-control" accept="image/*">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger btn-block" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-<% 
+</div>
+<%
+        }
     }
-}
 %>
 
 <%

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -42,21 +43,7 @@ public class sv_EditarEquipo extends HttpServlet {
             String nuevoDirector = request.getParameter("director");
 
             Part imagenPart = request.getPart("bandera");
-            String nuevaImagenBandera = null; // Variable para almacenar la nueva ruta de la imagen
-
-            if (imagenPart != null && imagenPart.getSize() > 0) { // Si se envió una nueva imagen
-                String imagenFileName = Paths.get(imagenPart.getSubmittedFileName()).getFileName().toString();
-                String uploadDir = getServletContext().getRealPath("/") + "images/";
-                File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) {
-                    uploadDirFile.mkdirs();
-                }
-
-                nuevaImagenBandera = uploadDir + imagenFileName;
-                try (InputStream input = imagenPart.getInputStream()) {
-                    Files.copy(input, Paths.get(nuevaImagenBandera), StandardCopyOption.REPLACE_EXISTING);
-                }
-            }
+            String nuevaImagenBandera = null; // Variable for storing the new image path
 
             HttpSession session = request.getSession();
             GestionarEquipos gestionarEquipos = new GestionarEquipos();
@@ -64,21 +51,41 @@ public class sv_EditarEquipo extends HttpServlet {
             // Editar el equipo
             Equipo equipo = gestionarEquipos.buscarEquipo(idEquipo, getServletContext());
             if (equipo != null) {
-                if (nuevaImagenBandera == null) { // Si no se envió una nueva imagen, mantener la existente
-                    nuevaImagenBandera = equipo.getImagenBandera();
+                if (imagenPart != null && imagenPart.getSize() > 0) { // Si se envió una nueva imagen
+                    String imagenFileName = Paths.get(imagenPart.getSubmittedFileName()).getFileName().toString();
+                    String uploadDir = getServletContext().getRealPath("/") + "images/";
+                    File uploadDirFile = new File(uploadDir);
+                    if (!uploadDirFile.exists()) {
+                        uploadDirFile.mkdirs();
+                    }
+
+                    nuevaImagenBandera = uploadDir + imagenFileName;
+                    try (InputStream input = imagenPart.getInputStream()) {
+                        Files.copy(input, Paths.get(nuevaImagenBandera), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
+                        System.err.println("Error al subir la imagen: " + e.getMessage());
+                        // En caso de error al subir la imagen, no actualizar la imagen del equipo
+                        nuevaImagenBandera = null;
+                    }
                 }
+
+                // Llamar al método editarEquipo con la nueva imagen
                 gestionarEquipos.editarEquipo(idEquipo, nuevoPais, nuevoDirector, nuevaImagenBandera, getServletContext());
-                session.setAttribute("mensaje", "El equipo se editó correctamente");
+
+                // Redirigir a la página de gestión de equipos
+                response.sendRedirect("primary.jsp");
             } else {
-                session.setAttribute("mensaje", "No se encontró el equipo con ID: " + idEquipo);
+                // No se encontró el equipo con el ID especificado
+                request.setAttribute("error", "No se encontró el equipo con ID: " + idEquipo);
+                RequestDispatcher rd = request.getRequestDispatcher("primary.jsp");
+                rd.forward(request, response);
             }
-            response.sendRedirect("index.jsp");
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("mensaje", "ID del equipo es inválido");
-            response.sendRedirect("index.jsp");
-        } catch (IOException | ServletException e) {
-            request.getSession().setAttribute("mensaje", "Error al modificar el equipo: " + e.getMessage());
-            response.sendRedirect("index.jsp");
+            // No se proporcionó un ID válido
+            System.err.println("Error al editar el equipo: " + e.getMessage());
+            request.setAttribute("error", "No se proporcionó un ID válido");
+            RequestDispatcher rd = request.getRequestDispatcher("primary.jsp");
+            rd.forward(request, response);
         }
     }
 

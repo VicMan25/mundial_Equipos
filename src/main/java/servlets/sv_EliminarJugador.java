@@ -57,7 +57,7 @@ public class sv_EliminarJugador extends HttpServlet {
             session.setAttribute("mensaje", "No se encontró el jugador con ID: " + idEliminar);
         }
 
-        response.sendRedirect("plantilla.jsp");
+        response.sendRedirect("secondary.jsp");
     }
 
     @Override

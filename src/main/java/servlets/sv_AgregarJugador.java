@@ -43,7 +43,7 @@ public class sv_AgregarJugador extends HttpServlet {
                     if (j.getIdJugador() == idJugador) {
                         // El ID ya existe, mostrar un mensaje de error y redireccionar
                         request.getSession().setAttribute("mensaje", "El ID del jugador ya está en uso.");
-                        response.sendRedirect("plantilla.jsp");
+                        response.sendRedirect("secondary.jsp");
                         return; // Salir del método doPost
                     }
                 }
@@ -74,7 +74,7 @@ public class sv_AgregarJugador extends HttpServlet {
 
 
             request.getSession().setAttribute("mensaje", "Jugador agregado correctamente.");
-            response.sendRedirect("plantilla.jsp");
+            response.sendRedirect("secondary.jsp");
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID no es válido");
         } catch (IOException | ServletException e) {
