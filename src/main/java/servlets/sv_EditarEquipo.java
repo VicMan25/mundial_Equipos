@@ -43,45 +43,39 @@ public class sv_EditarEquipo extends HttpServlet {
             String nuevoDirector = request.getParameter("director");
 
             Part imagenPart = request.getPart("bandera");
-            String nuevaImagenBandera = null; // Variable for storing the new image path
+            String nuevaImagenBandera = null;
 
             HttpSession session = request.getSession();
             GestionarEquipos gestionarEquipos = new GestionarEquipos();
 
-            // Editar el equipo
-            Equipo equipo = gestionarEquipos.buscarEquipo(idEquipo, getServletContext());
-            if (equipo != null) {
-                if (imagenPart != null && imagenPart.getSize() > 0) { // Si se envió una nueva imagen
-                    String imagenFileName = Paths.get(imagenPart.getSubmittedFileName()).getFileName().toString();
-                    String uploadDir = getServletContext().getRealPath("/") + "images/";
-                    File uploadDirFile = new File(uploadDir);
-                    if (!uploadDirFile.exists()) {
-                        uploadDirFile.mkdirs();
-                    }
+            String uploadDir = getServletContext().getRealPath("/") + "images" + File.separator;
 
-                    nuevaImagenBandera = uploadDir + imagenFileName;
-                    try (InputStream input = imagenPart.getInputStream()) {
-                        Files.copy(input, Paths.get(nuevaImagenBandera), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        System.err.println("Error al subir la imagen: " + e.getMessage());
-                        // En caso de error al subir la imagen, no actualizar la imagen del equipo
-                        nuevaImagenBandera = null;
-                    }
+            if (imagenPart != null && imagenPart.getSize() > 0) {
+                String imagenFileName = Paths.get(imagenPart.getSubmittedFileName()).getFileName().toString();
+                File uploadDirFile = new File(uploadDir);
+                if (!uploadDirFile.exists()) {
+                    uploadDirFile.mkdirs();
                 }
 
-                // Llamar al método editarEquipo con la nueva imagen
-                gestionarEquipos.editarEquipo(idEquipo, nuevoPais, nuevoDirector, nuevaImagenBandera, getServletContext());
+                nuevaImagenBandera = "images/" + imagenFileName;
+                try (InputStream input = imagenPart.getInputStream()) {
+                    Files.copy(input, Paths.get(uploadDir + imagenFileName), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    System.err.println("Error al subir la imagen: " + e.getMessage());
+                    nuevaImagenBandera = null;
+                }
+            }
 
-                // Redirigir a la página de gestión de equipos
+            Equipo equipo = gestionarEquipos.buscarEquipo(idEquipo, getServletContext());
+            if (equipo != null) {
+                gestionarEquipos.editarEquipo(idEquipo, nuevoPais, nuevoDirector, nuevaImagenBandera, getServletContext());
                 response.sendRedirect("primary.jsp");
             } else {
-                // No se encontró el equipo con el ID especificado
                 request.setAttribute("error", "No se encontró el equipo con ID: " + idEquipo);
                 RequestDispatcher rd = request.getRequestDispatcher("primary.jsp");
                 rd.forward(request, response);
             }
         } catch (NumberFormatException e) {
-            // No se proporcionó un ID válido
             System.err.println("Error al editar el equipo: " + e.getMessage());
             request.setAttribute("error", "No se proporcionó un ID válido");
             RequestDispatcher rd = request.getRequestDispatcher("primary.jsp");

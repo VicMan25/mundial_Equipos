@@ -102,35 +102,28 @@ public class GestionarEquipos {
     }
 
     public void editarEquipo(int idEquipo, String nuevoPais, String nuevoDirector, String nuevaImagenBandera, ServletContext context) throws IOException {
-        cargarEquiposDesdeArchivo(context); // Cargar equipos antes de editar uno existente
-
-        for (Equipo e : misEquipos) {
-            if (e.getIdEquipo() == idEquipo) {
-                // Se encontró el equipo, ahora se actualizan sus datos
-                e.setPais(nuevoPais);
-                e.setDirector(nuevoDirector);
-
-                // Verificar si se proporcionó una nueva imagen
-                if (nuevaImagenBandera != null && !nuevaImagenBandera.isEmpty()) {
-                    // Verificar si la nueva imagen existe en el servidor
-                    File imagenFile = new File(context.getRealPath("/"), nuevaImagenBandera);
-                    if (imagenFile.exists()) {
-                        // La imagen existe, actualizar la ruta de la imagen
-                        e.setImagenBandera(nuevaImagenBandera);
-                    } else {
-                        // La imagen no existe, mantener la imagen existente
-                        System.err.println("La imagen proporcionada no existe: " + nuevaImagenBandera);
-                    }
-                }
-
-                // Guardar los cambios en el archivo
-                guardarEquiposEnArchivo(context);
-                return; // Salir del método después de editar el equipo
-            }
+        if (nuevoPais == null || nuevoPais.isEmpty() || nuevoDirector == null || nuevoDirector.isEmpty()) {
+            throw new IllegalArgumentException("Invalid input");
         }
 
-        // Si llega aquí, significa que no se encontró el equipo con el ID especificado
-        System.err.println("No se encontró el equipo con ID: " + idEquipo);
+        Equipo equipo = buscarEquipo(idEquipo, context);
+        if (equipo == null) {
+            System.err.println("No se encontró el equipo con ID: " + idEquipo);
+            return;
+        }
+
+        equipo.setPais(nuevoPais);
+        equipo.setDirector(nuevoDirector);
+
+        if (nuevaImagenBandera != null && !nuevaImagenBandera.isEmpty()) {
+            File imagenFile = new File(context.getRealPath("/"), nuevaImagenBandera);
+            if (imagenFile.exists()) {
+                equipo.setImagenBandera(nuevaImagenBandera);
+            } else {
+                System.err.println("La imagen proporcionada no existe: " + nuevaImagenBandera);
+            }
+        }
+        guardarEquiposEnArchivo(context);
     }
 
 }

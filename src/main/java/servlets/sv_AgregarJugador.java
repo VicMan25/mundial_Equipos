@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.ServletContext;
+import mundo.GestionarEquipos;
 import mundo.Jugador;
 import mundo.GestionarJugadores;
 
@@ -23,6 +24,7 @@ import mundo.GestionarJugadores;
 public class sv_AgregarJugador extends HttpServlet {
 
     public static GestionarJugadores gesJugadores = new GestionarJugadores();
+    public static GestionarEquipos gesEquipos = new GestionarEquipos();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -35,6 +37,7 @@ public class sv_AgregarJugador extends HttpServlet {
             double peso = Double.parseDouble(request.getParameter("peso"));
             double salario = Double.parseDouble(request.getParameter("salario"));
             String posicion = request.getParameter("posicion");
+            int idEquipo = Integer.parseInt(request.getParameter("idEquipo"));
 
             // Verificar si el ID ya existe en la lista
             List<Jugador> listaJugadores = gesJugadores.getMisJugadores(getServletContext());
@@ -43,7 +46,7 @@ public class sv_AgregarJugador extends HttpServlet {
                     if (j.getIdJugador() == idJugador) {
                         // El ID ya existe, mostrar un mensaje de error y redireccionar
                         request.getSession().setAttribute("mensaje", "El ID del jugador ya está en uso.");
-                        response.sendRedirect("secondary.jsp");
+                        response.sendRedirect("primary.jsp");
                         return; // Salir del método doPost
                     }
                 }
@@ -68,13 +71,13 @@ public class sv_AgregarJugador extends HttpServlet {
                 Files.copy(input, Paths.get(imagenPath), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            Jugador nuevoJugador = new Jugador(idJugador, nombre, edad, altura, peso, salario, posicion, "images/" + imagenFileName);
+            Jugador nuevoJugador = new Jugador(idJugador, nombre, edad, altura, peso, salario, posicion, "images/" + imagenFileName, idEquipo);
 
             gesJugadores.agregarJugador(nuevoJugador, getServletContext());
 
 
             request.getSession().setAttribute("mensaje", "Jugador agregado correctamente.");
-            response.sendRedirect("secondary.jsp");
+            response.sendRedirect("primary.jsp");
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID no es válido");
         } catch (IOException | ServletException e) {

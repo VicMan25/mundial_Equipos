@@ -10,11 +10,12 @@ public class Jugador {
     private double salario;
     private String posicion;
     private String foto;
+    private int idEquipo;
 
     public Jugador() {
     }
 
-    public Jugador(int idJugador, String nombre, int edad, double altura, double peso, double salario, String posicion, String foto) {
+    public Jugador(int idJugador, String nombre, int edad, double altura, double peso, double salario, String posicion, String foto, int idEquipo) {
         this.idJugador = idJugador;
         this.nombre = nombre;
         this.edad = edad;
@@ -23,6 +24,7 @@ public class Jugador {
         this.salario = salario;
         this.posicion = posicion;
         this.foto = foto;
+        this.idEquipo = idEquipo;
     }
 
     public int getIdJugador() {
@@ -87,6 +89,14 @@ public class Jugador {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+    
+    public int getIdEquipo() {
+        return idJugador;
+    }
+
+    public void setIdEquipor(int idEquipo) {
+        this.idEquipo = idEquipo;
     }
     
 }

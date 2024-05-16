@@ -11,6 +11,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="index.jsp">Regresar al Inicio</a>
+                    <a class="nav-link" href="primary.jsp">Regresar al Primary</a>
                 </li>
             </ul>
         </div>
@@ -140,6 +141,7 @@
                 <p>Peso: <%= j.getPeso()%> Kg</p>
                 <p>Salario: <%= j.getSalario()%></p>
                 <p>Posición: <%= j.getPosicion()%></p>
+                <p>Id Equipo: <%= j.getIdEquipo()%></p>
                 <% if (traerImagen != null && !traerImagen.isEmpty()) {%>
                 <p><img src="<%= request.getContextPath() + "/" + j.getFoto()%>" alt="Foto del jugador" class="img-fluid"></p>
                     <% } else { %>

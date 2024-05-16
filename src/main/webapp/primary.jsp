@@ -104,23 +104,23 @@
                                     <input type="text" name="nombre" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="marca">Edad:</label>  
+                                    <label for="edad">Edad:</label>  
                                     <input type="text" name="edad" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="marca">Altura:</label>  
+                                    <label for="altura">Altura:</label>  
                                     <input type="text" name="altura" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="marca">Peso:</label>  
+                                    <label for="peso">Peso:</label>  
                                     <input type="text" name="peso" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="marca">Salario:</label>  
+                                    <label for="salario">Salario:</label>  
                                     <input type="text" name="salario" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="marca">Posición:</label>  
+                                    <label for="posicion">Posición:</label>  
                                     <select name="posicion" class="form-control" required>
                                         <option value="ARQ">ARQ</option>
                                         <option value="DEF">DEF</option>
@@ -129,29 +129,25 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="marca">Equipo:</label>  
-                                    <select name="Equipo" class="form-control" required>
-                                        <option value="Colombia">Colombia</option>
-                                        <option value="Argentina">Argentina</option>
-                                        <option value="Peru">Perú</option>
-                                        <option value="Chile">Chile</option>
-                                        <option value="Canada">Canadá</option>
-                                        <option value="Ecuador">Ecuador</option>
-                                        <option value="Venezuela">Venezuela</option>
-                                        <option value="Jamaica">Jamaica</option>
-                                        <option value="Estados Unidos">Estados Unidos</option>
-                                        <option value="Uruguay">Uruguay</option>
-                                        <option value="Panama">Panama</option>
-                                        <option value="Bolivia">Bolivia</option>
-                                        <option value="Brasil">Brasil</option>
-                                        <option value="Paraguay">Paraguay</option>
-                                        <option value="Costa Rica">Costa Rica</option>
-                                        <option value="Mexico">México</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
                                     <input type="file" name="foto" id="imagen" class="form-control" accept="image/*" required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="idEquipo">Equipo:</label>  
+                                    <select name="idEquipo" class="form-control" required>
+                                        <option selected>Selecciona el equipo del jugador</option>
+                                        <%
+                                            ServletContext context = getServletContext();
+                                            GestionarEquipos gestionarEquipos = new GestionarEquipos();
+                                            List<Equipo> equipos = gestionarEquipos.getMisEquipos(context);
+                                            for (Equipo equipo : equipos) {
+                                        %>
+                                        <option value="<%= equipo.getIdEquipo()%>"><%= equipo.getPais()%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+                                </div>
+                                
                                 <div class="d-grid">
                                     <input type="submit" name="agregar" value="Agregar Jugador" class="btn btn-success btn-block">
                                 </div>
@@ -276,9 +272,9 @@
                             <div class="row"> <!-- Nuevo div row para contener los equipos -->
                                 <%
                                     GestionarEquipos gesEquipos = new GestionarEquipos();
-                                    ServletContext context = request.getServletContext();
-                                    gesEquipos.cargarEquiposDesdeArchivo(context);
-                                    List<Equipo> misEquipos = gesEquipos.getMisEquipos(context);
+                                    ServletContext context1 = request.getServletContext();
+                                    gesEquipos.cargarEquiposDesdeArchivo(context1);
+                                    List<Equipo> misEquipos = gesEquipos.getMisEquipos(context1);
 
                                     if (misEquipos != null) {
                                         int contador = 0; // Variable para contar equipos

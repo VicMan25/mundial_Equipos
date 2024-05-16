@@ -53,18 +53,18 @@ public class GestionarJugadores {
     }
 
     public void cargarJugadoresDesdeArchivo(ServletContext context) {
-        // Reutilizamos la ruta relativa del archivo
-        String relativePath = "/data/jugadores.txt";
-        String absPath = context.getRealPath(relativePath);
+    String relativePath = "/data/jugadores.txt";
+    String absPath = context.getRealPath(relativePath);
 
-        File archivo = new File(absPath);
-        misJugadores = new ArrayList<>(); // Inicializamos la lista aquí
+    File archivo = new File(absPath);
+    misJugadores = new ArrayList<>(); // Inicializamos la lista aquí
 
-        if (archivo.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
-                String linea;
-                while ((linea = br.readLine()) != null) {
-                    String[] datos = linea.split(";");
+    if (archivo.exists()) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(";");
+                if (datos.length == 9) {
                     int idJugador = Integer.parseInt(datos[0]);
                     String nombre = datos[1];
                     int edad = Integer.parseInt(datos[2]);
@@ -73,15 +73,20 @@ public class GestionarJugadores {
                     double salario = Double.parseDouble(datos[5]);
                     String posicion = datos[6];
                     String foto = datos[7];
+                    int idEquipo = Integer.parseInt(datos[8]);
                     
-                    Jugador j = new Jugador(idJugador, nombre, edad, altura, peso, salario, posicion, foto);
+                    Jugador j = new Jugador(idJugador, nombre, edad, altura, peso, salario, posicion, foto, idEquipo);
                     misJugadores.add(j);
+                } else {
+                    System.err.println("Línea con datos insuficientes: " + linea);
                 }
-            } catch (IOException e) {
-                System.err.println("Error al cargar los jugadores desde el archivo: " + e.getMessage());
             }
+        } catch (IOException e) {
+            System.err.println("Error al cargar los jugadores desde el archivo: " + e.getMessage());
         }
     }
+}
+
 
     public void guardarJugadoresEnArchivo(ServletContext context) {
         // Reutilizamos la ruta relativa del archivo
@@ -98,7 +103,7 @@ public class GestionarJugadores {
         }
         try (BufferedWriter pluma = new BufferedWriter(new FileWriter(archivo))) {
             for (Jugador j : misJugadores) {
-                pluma.write(j.getIdJugador() + ";" + j.getNombre() + ";" + j.getEdad() + ";" + j.getAltura()+ ";" +j.getPeso()+ ";" +j.getSalario()+ ";" +j.getPosicion()+ ";" +j.getFoto());
+                pluma.write(j.getIdJugador() + ";" + j.getNombre() + ";" + j.getEdad() + ";" + j.getAltura()+ ";" +j.getPeso()+ ";" +j.getSalario()+ ";" +j.getPosicion()+ ";" +j.getFoto() + ";" +j.getIdEquipo());
                 pluma.newLine();
             }
         } catch (IOException e) {
