@@ -72,7 +72,6 @@ public class sv_AgregarJugador extends HttpServlet {
             }
 
             Jugador nuevoJugador = new Jugador(idJugador, nombre, edad, altura, peso, salario, posicion, "images/" + imagenFileName, idEquipo);
-
             gesJugadores.agregarJugador(nuevoJugador, getServletContext());
 
 

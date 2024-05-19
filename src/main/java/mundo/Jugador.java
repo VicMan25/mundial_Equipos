@@ -92,7 +92,7 @@ public class Jugador {
     }
     
     public int getIdEquipo() {
-        return idJugador;
+        return idEquipo;
     }
 
     public void setIdEquipor(int idEquipo) {

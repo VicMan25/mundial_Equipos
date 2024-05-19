@@ -1,3 +1,4 @@
+<%@page import="mundo.GestionarEquipos"%>
 <%@page import="mundo.GestionarJugadores"%>
 <%@page import="mundo.Equipo"%>
 <%@page import="mundo.Jugador"%>
@@ -65,6 +66,22 @@
                         <div class="mb-3">
                             <input type="file" name="foto" id="imagen" class="form-control" accept="image/*" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="idEquipo">Equipo:</label>  
+                            <select name="idEquipo" class="form-control" required>
+                                <option selected>Selecciona el equipo del jugador</option>
+                                <%
+                                    ServletContext context = getServletContext();
+                                    GestionarEquipos gestionarEquipos = new GestionarEquipos();
+                                    List<Equipo> equipos = gestionarEquipos.getMisEquipos(context);
+                                    for (Equipo equipo : equipos) {
+                                %>
+                                <option value="<%= equipo.getIdEquipo()%>"><%= equipo.getPais()%></option>
+                                <%
+                                    }
+                                %>
+                            </select>
+                        </div>
                         <div class="d-grid">
                             <input type="submit" name="agregar" value="Agregar Jugador" class="btn btn-success btn-block">
                         </div>
@@ -87,9 +104,9 @@
                         </thead>
                         <%
                             GestionarJugadores gesJugadores = new GestionarJugadores();
-                            ServletContext context = request.getServletContext();
-                            gesJugadores.cargarJugadoresDesdeArchivo(context);
-                            List<Jugador> misJugadores = gesJugadores.getMisJugadores(context);
+                            ServletContext context1 = request.getServletContext();
+                            gesJugadores.cargarJugadoresDesdeArchivo(context1);
+                            List<Jugador> misJugadores = gesJugadores.getMisJugadores(context1);
 
                             if (misJugadores != null) {
                                 for (Jugador j : misJugadores) {

@@ -147,7 +147,7 @@
                                         %>
                                     </select>
                                 </div>
-                                
+
                                 <div class="d-grid">
                                     <input type="submit" name="agregar" value="Agregar Jugador" class="btn btn-success btn-block">
                                 </div>
