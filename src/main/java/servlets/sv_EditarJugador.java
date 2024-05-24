@@ -43,7 +43,6 @@ public class sv_EditarJugador extends HttpServlet {
             double nuevoPeso = Double.parseDouble(request.getParameter("peso"));
             double nuevoSalario = Double.parseDouble(request.getParameter("salario"));
             String nuevaPosicion = request.getParameter("posicion");
-            int nuevoIdEquipo = Integer.parseInt(request.getParameter("idEquipo")); // Obtener el nuevo ID del equipo
 
             Part imagenPart = request.getPart("foto");
             String nuevaFoto = null; // Variable para almacenar la nueva ruta de la foto
@@ -56,9 +55,9 @@ public class sv_EditarJugador extends HttpServlet {
                     uploadDirFile.mkdirs();
                 }
 
-                nuevaFoto = "images/" + imagenFileName;
+                nuevaFoto = uploadDir + imagenFileName;
                 try (InputStream input = imagenPart.getInputStream()) {
-                    Files.copy(input, Paths.get(uploadDir + imagenFileName), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(input, Paths.get(nuevaFoto), StandardCopyOption.REPLACE_EXISTING);
                 }
             }
 
@@ -71,14 +70,14 @@ public class sv_EditarJugador extends HttpServlet {
                 if (nuevaFoto == null) { // Si no se envió una nueva imagen, mantener la existente
                     nuevaFoto = j.getFoto();
                 }
-                gesJugadores.editarJugador(idJugador, nuevoNombre, nuevaEdad, nuevaAltura, nuevoPeso, nuevoSalario, nuevaPosicion, nuevaFoto, nuevoIdEquipo, getServletContext());
+                gesJugadores.editarJugador(idJugador, nuevoNombre, nuevaEdad, nuevaAltura, nuevoPeso, nuevoSalario, nuevaPosicion, nuevaFoto, getServletContext());
                 session.setAttribute("mensaje", "El jugador se editó correctamente");
             } else {
                 session.setAttribute("mensaje", "No se encontró el jugador con ID: " + idJugador);
             }
             response.sendRedirect("secondary.jsp");
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("mensaje", "ID del jugador o equipo es inválido");
+            request.getSession().setAttribute("mensaje", "ID del jugador es inválido");
             response.sendRedirect("secondary.jsp");
         } catch (IOException | ServletException e) {
             request.getSession().setAttribute("mensaje", "Error al modificar el jugador: " + e.getMessage());

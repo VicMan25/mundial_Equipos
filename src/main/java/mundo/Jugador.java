@@ -95,7 +95,7 @@ public class Jugador {
         return idEquipo;
     }
 
-    public void setIdEquipo(int idEquipo) {
+    public void setIdEquipor(int idEquipo) {
         this.idEquipo = idEquipo;
     }
     

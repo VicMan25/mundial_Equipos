@@ -10,7 +10,6 @@
 <%@page import="mundo.Equipo"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -46,26 +45,6 @@
                 padding: 20px; /* Espacio interior */
                 border-radius: 5px; /* Bordes redondeados */
                 margin: 10px 0; /* Espacio exterior */
-            }
-
-            .player-info {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                text-align: center;
-            }
-
-            .player-name {
-                background-color: rgba(0, 0, 0, 0.5);
-                color: white;
-                padding: 5px 10px;
-                border-radius: 5px;
-                font-size: 14px;
-                position: absolute;
-                bottom: -10px;
-                left: 50%;
-                transform: translateX(-50%);
             }
         </style>
     </head>
@@ -134,53 +113,13 @@
                                 <td><%= jugador.getNombre()%></td>
                                 <td><%= jugador.getEdad()%></td>
                                 <td><%= jugador.getPosicion()%></td>
+
                                 <td>
                                     <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verModal<%= jugador.getIdJugador()%>"><i class="fa fa-eye"></i></a>
                                     <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#verModal2<%= jugador.getIdJugador()%>"><i class="fa fa-edit"></i></a>
                                     <a href="sv_EliminarJugador?id=<%= jugador.getIdJugador()%>" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar este jugador?')"><i class="fa fa-trash"></i></a>
                                 </td>
-                            </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
-                </div>
 
-                <!-- Columna derecha: Información del Jugador -->
-                <div class="col-lg-6 text-center bordered-box">
-                    <h3>Información del Jugador</h3>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Edad</th>
-                                <th>Altura</th>
-                                <th>Peso</th>
-                                <th>Salario</th>
-                                <th>Posición</th>
-                                <th>Foto</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                for (Jugador jugador : jugadores) {
-                                    String traerImagen = jugador.getFoto();
-                            %>
-                            <tr class="jugador-info" data-equipo="<%= jugador.getIdEquipo()%>">
-                                <td><%= jugador.getIdJugador()%></td>
-                                <td><%= jugador.getNombre()%></td>
-                                <td><%= jugador.getEdad()%></td>
-                                <td><%= jugador.getAltura()%></td>
-                                <td><%= jugador.getPeso()%></td>
-                                <td><%= jugador.getSalario()%></td>
-                                <td><%= jugador.getPosicion()%></td>
-                                <td>
-                                    <% if (traerImagen != null && !traerImagen.isEmpty()) {%>
-                                    <img src="<%= request.getContextPath() + "/" + traerImagen%>" alt="Imagen del Jugador" class="img-fluid" style="width: 50px; height: auto;">
-                                    <% } else { %>
-                                    <p>No hay imagen disponible</p>
-                                    <% } %>
-                                </td>
                             </tr>
                             <% } %>
                         </tbody>
@@ -258,114 +197,12 @@
                 </div>
             </div>
         </div>
+        <%
+                }
+            }
+        %>
 
-
-        <!-- Sección adicional: Formación de Equipos -->
-        <section class="bg-light">
-            <div class="container py-5">
-                <h2 class="text-center">Formación del Equipo</h2>
-                <div class="row mt-4 position-relative">
-                    <!-- Columna izquierda: Información del Equipo -->
-                    <div class="col-lg-9">
-                        <div class="bordered-box position-relative">
-                            <h3>Plantilla del Equipo</h3>
-                            <img src="recursos/assets/img/ImgEST/cancha.jpg" class="img-fluid w-100" style="height: 100%;" alt="cancha">
-                            <!-- Imagen pequeña superpuesta con nombre -->
-                            <div class="player-info">
-                                <% if (traerImagen != null && !traerImagen.isEmpty()) {%>
-                                <p><img src="<%= request.getContextPath() + "/" + j.getFoto()%>" alt="Foto del jugador" class="img-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, 30%); width: 120px; height: 130px;"></p>
-                                    <% } else { %>
-                                <img src="recursos/assets/img/ImgEST/Jug_00" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, 30%); width: 120px; height: 130px;">
-                                <% } %>
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/LMartinez.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, 30%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/AMAllister.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(50%, 200%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/CRomero.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-150%, 200%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/EFernandez.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(175%, 75%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/JAlvarez.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-275%, 75%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/LMessi.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-150%, -150%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/MAcuña.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(50%, -150%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/NMolina.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -300%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/NicolasOtamendi.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(-275%, -300%); width: 120px; height: 130px;">
-                            </div>
-                            <div class="player-info">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/RDPaul.png" class="img-small rounded" style="position: absolute; top: 50%; left: 50%; transform: translate(175%, -300%); width: 120px; height: 130px;">
-                            </div>
-                            <!-- Aquí va el contenido de la columna izquierda -->
-                            <!-- Puedes agregar contenido dinámico según tus necesidades -->
-                        </div>
-                    </div>
-                    <!-- Columna derecha: Otra información -->
-                    <div class="col-lg-3">
-                        <div class="bordered-box">
-                            <h3> Escudo Equipo</h3>
-                            <div class="mt-4">
-                                <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                            </div>
-                            <!-- Botón "Calcula Nómina" -->
-                            <button class="btn btn-primary btn-block mt-4">Calcula Nómina</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Título "Suplencia" -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <h2 class="text-center">Suplencia</h2>
-                    </div>
-                </div>
-                <!-- Columna de tamaño 12 para suplentes -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="bordered-box">
-                            <!-- Contenido de la columna para suplentes -->
-                            <div class="row">
-                                <div class="col-2">
-                                    <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                                </div>
-                                <div class="col-2">
-                                    <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                                </div>
-                                <div class="col-2">
-                                    <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                                </div>
-                                <div class="col-2">
-                                    <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                                </div>
-                                <div class="col-2">
-                                    <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                                </div>
-                                <div class="col-2">
-                                    <img src="recursos/assets/img/fotosJugadores/argentina/EscArgentina.png" class="img-fluid rounded" style="width: 100%;" alt="Escudo de Argentina">
-                                </div>
-                            </div>
-
-                            <!-- Puedes agregar más imágenes según sea necesario -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <% }
-                 }%>
-        </section>
         <!-- Footer -->
-
 
         <!-- Scroll to Top Button-->
         <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -380,14 +217,10 @@
                                             var selectEquipo = document.getElementById("selectEquipo");
                                             var selectedEquipoId = selectEquipo.value;
                                             var jugadores = document.getElementsByClassName("jugador");
-                                            var jugadoresInfo = document.getElementsByClassName("jugador-info");
 
                                             // Ocultar todos los jugadores
                                             for (var i = 0; i < jugadores.length; i++) {
                                                 jugadores[i].style.display = "none";
-                                            }
-                                            for (var i = 0; i < jugadoresInfo.length; i++) {
-                                                jugadoresInfo[i].style.display = "none";
                                             }
 
                                             // Mostrar solo los jugadores del equipo seleccionado
