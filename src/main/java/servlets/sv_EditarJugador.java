@@ -36,18 +36,19 @@ public class sv_EditarJugador extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int idJugador = Integer.parseInt(request.getParameter("idJugador"));
+            int idJugador = Integer.parseInt(request.getParameter("id"));
             String nuevoNombre = request.getParameter("nombre");
             int nuevaEdad = Integer.parseInt(request.getParameter("edad"));
             double nuevaAltura = Double.parseDouble(request.getParameter("altura"));
             double nuevoPeso = Double.parseDouble(request.getParameter("peso"));
             double nuevoSalario = Double.parseDouble(request.getParameter("salario"));
             String nuevaPosicion = request.getParameter("posicion");
+            int nuevoIdEquipo = Integer.parseInt(request.getParameter("idEquipo"));
 
             Part imagenPart = request.getPart("foto");
-            String nuevaFoto = null; // Variable para almacenar la nueva ruta de la foto
+            String nuevaFoto = null;
 
-            if (imagenPart != null && imagenPart.getSize() > 0) { // Si se envió una nueva imagen
+            if (imagenPart != null && imagenPart.getSize() > 0) {
                 String imagenFileName = Paths.get(imagenPart.getSubmittedFileName()).getFileName().toString();
                 String uploadDir = getServletContext().getRealPath("/") + "images/";
                 File uploadDirFile = new File(uploadDir);
@@ -55,22 +56,21 @@ public class sv_EditarJugador extends HttpServlet {
                     uploadDirFile.mkdirs();
                 }
 
-                nuevaFoto = uploadDir + imagenFileName;
+                nuevaFoto = "images/" + imagenFileName;
                 try (InputStream input = imagenPart.getInputStream()) {
-                    Files.copy(input, Paths.get(nuevaFoto), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(input, Paths.get(uploadDir + imagenFileName), StandardCopyOption.REPLACE_EXISTING);
                 }
             }
 
             HttpSession session = request.getSession();
             GestionarJugadores gesJugadores = new GestionarJugadores();
 
-            // Editar el jugador
             Jugador j = gesJugadores.buscarJugador(idJugador, getServletContext());
             if (j != null) {
-                if (nuevaFoto == null) { // Si no se envió una nueva imagen, mantener la existente
+                if (nuevaFoto == null) {
                     nuevaFoto = j.getFoto();
                 }
-                gesJugadores.editarJugador(idJugador, nuevoNombre, nuevaEdad, nuevaAltura, nuevoPeso, nuevoSalario, nuevaPosicion, nuevaFoto, getServletContext());
+                gesJugadores.editarJugador(idJugador, nuevoNombre, nuevaEdad, nuevaAltura, nuevoPeso, nuevoSalario, nuevaPosicion, nuevaFoto, nuevoIdEquipo, getServletContext());
                 session.setAttribute("mensaje", "El jugador se editó correctamente");
             } else {
                 session.setAttribute("mensaje", "No se encontró el jugador con ID: " + idJugador);
