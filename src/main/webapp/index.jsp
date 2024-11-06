@@ -385,9 +385,6 @@
                                 <label for="bandera" class="form-label">Imagen Bandera:</label>
                                 <input type="file" name="bandera" id="imagen" class="form-control" accept="image/*">
                             </div>
-                            <div class="mb-2">
-                                <a href="plantilla.jsp" class="btn btn-success btn-block">Modificar Plantilla</a>
-                            </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
                                 <button type="button" class="btn btn-danger btn-block" data-bs-dismiss="modal">Cancelar</button>

@@ -33,7 +33,7 @@ public class sv_EliminarEquipo extends HttpServlet {
 
         if (listaEquipos == null) {
             session.setAttribute("mensaje", "No hay equipos para eliminar");
-            response.sendRedirect("primary.jsp");
+            response.sendRedirect("index.jsp");
             return;
         }
 
@@ -57,7 +57,7 @@ public class sv_EliminarEquipo extends HttpServlet {
             session.setAttribute("mensaje", "No se encontró el equipo con ID: " + idEliminar);
         }
 
-        response.sendRedirect("primary.jsp");
+        response.sendRedirect("index.jsp");
     }
 
     @Override

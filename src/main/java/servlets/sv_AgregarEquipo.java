@@ -39,7 +39,7 @@ public class sv_AgregarEquipo extends HttpServlet {
                     if (e.getIdEquipo() == idEquipo) {
                         // El ID ya existe, mostrar un mensaje de error y redireccionar
                         request.getSession().setAttribute("mensaje", "El ID del equipo ya está en uso.");
-                        response.sendRedirect("primary.jsp");
+                        response.sendRedirect("index.jsp");
                         return; // Salir del método doPost
                     }
                 }
@@ -70,7 +70,7 @@ public class sv_AgregarEquipo extends HttpServlet {
 
 
             request.getSession().setAttribute("mensaje", "Equipo agregado correctamente.");
-            response.sendRedirect("primary.jsp");
+            response.sendRedirect("index.jsp");
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID no es válido");
         } catch (IOException | ServletException e) {

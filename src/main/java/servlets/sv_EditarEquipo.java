@@ -69,16 +69,16 @@ public class sv_EditarEquipo extends HttpServlet {
             Equipo equipo = gestionarEquipos.buscarEquipo(idEquipo, getServletContext());
             if (equipo != null) {
                 gestionarEquipos.editarEquipo(idEquipo, nuevoPais, nuevoDirector, nuevaImagenBandera, getServletContext());
-                response.sendRedirect("primary.jsp");
+                response.sendRedirect("index.jsp");
             } else {
                 request.setAttribute("error", "No se encontró el equipo con ID: " + idEquipo);
-                RequestDispatcher rd = request.getRequestDispatcher("primary.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
             }
         } catch (NumberFormatException e) {
             System.err.println("Error al editar el equipo: " + e.getMessage());
             request.setAttribute("error", "No se proporcionó un ID válido");
-            RequestDispatcher rd = request.getRequestDispatcher("primary.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
         }
     }
